@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table, td {
+  border: 1px solid black;
+}
+button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column; 
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  width: auto;
+}
+</style>
+</head>
+<body>
+
+
+<table id="myTable">
+        <tr>
+                <td>Repository name</td>
+                
+              </tr>
+              
+  
+</table>
+<br>
+<input type = "button" onclick="postdata()" value="Send Data"/>
+<!-- <button type="button" onclick="appendColumn()">Try it</button> -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+
+    // dict = {'Shreyasgujjar/nih': ['config:', ' shreyas:yes', ' nih:no', 'app:', ''], 'Shreyasgujjar/shreyas': ['data:', '  joke:yes', ' nih:no', 'app:']};
+    // dict = {'Shreyasgujjar/nih': ['config:', 'shreyas:yes', 'nih:no', 'app:', ''], 'Shreyasgujjar/shreyas': ['data:', 'joke:yes', 'nih:no', 'app:']};
+    var yamldata = '{{yamlData}}';
+    console.log(dict);
+    var re = new RegExp("&#39;", 'g');
+    var res = yamldata.replace(re, '"');
+    console.log(res);
+    var dict = JSON.parse(res);
+    console.log(dict);
+    // res = res.replace("[", "");
+    // res = res.replace("]", "");
+    // console.log(res);
+    // re = new RegExp('"', 'g');
+    // res = res.replace(re, "");
+    // console.log(res)
+    // var array = res.split(",");
+    // console.log(array);
+    // var dict = array;
+  
+
+    
+
+var new_dict = {};
+var list_cols = [];
+var final_dict = {};
+    for (var key in dict){
+        new_dict = {};
+        lst = dict[key];
+        console.log(lst);
+        for(var i =0;i<lst.length;i++){
+            data = lst[i].split(":");
+            if(data[1]>0){
+                console.log("hee");
+                new_dict[data[0]] = "null";
+            }
+            else{
+                new_dict[data[0]] = data[1];
+                
+            }
+
+        }
+        final_dict[key] = new_dict;
+    }
+    console.log("final",final_dict);
+    var changed_dict = final_dict;
+
+    for(var key in final_dict){
+        for (var inner_key in final_dict[key]){
+            if(final_dict[key][inner_key] == "yes" || final_dict[key][inner_key] == "no" ){
+                if(list_cols.includes(inner_key)){
+                    console.log("hello");
+                    continue;
+                }
+                
+                else{
+                    list_cols.push(inner_key);
+                }
+                
+            }
+        }
+    }
+    console.log("list",list_cols);
+
+    for(var key in final_dict){
+        var table = document.getElementById("myTable");
+  var row = table.insertRow(-1);
+  var cell1 = row.insertCell(-1);
+ 
+  cell1.innerHTML = key  ;
+}
+
+var list_keys = Object.keys(final_dict);
+
+
+    
+    var tbl = document.getElementById('myTable'), // table reference
+        i;
+    // open loop for each row and append cell
+    for(var j =0; j <list_cols.length; j++){
+    for (i = 0; i < tbl.rows.length; i++) {
+        if(i==0){
+            createCell1(tbl.rows[i].insertCell(tbl.rows[i].cells.length), list_cols[j], 'col',list_keys[i-1]+":"+list_cols[j]);
+
+        }
+        else{
+        createCell(tbl.rows[i].insertCell(tbl.rows[i].cells.length), final_dict[list_keys[i-1]][list_cols[j]], 'col',list_keys[i-1]+":"+list_cols[j]);
+        }
+    }
+}
+
+
+function createCell(cell, text, style,identity) {
+    var div = document.createElement('BUTTON'); // create DIV element
+       // txt = document.createTextNode(text); // create text node
+    //div.appendChild(txt);    
+    div.id = identity;
+    div.textContent = text;                // append text node to the DIV
+    div.setAttribute('class', style);        // set DIV class attribute
+    div.setAttribute('className', style);    // set DIV class attribute for IE (?!)
+    cell.appendChild(div);                   // append DIV to the table cell
+}
+
+function createCell1(cell, text, style,identity) {
+    var div = document.createElement('div');// create DIV element
+ // create text node
+    div.id = identity;
+    div.textContent = text;
+   // div.appendChild(txt);                    // append text node to the DIV
+    div.setAttribute('class', style);        // set DIV class attribute
+    div.setAttribute('className', style);    // set DIV class attribute for IE (?!)
+    cell.appendChild(div);                   // append DIV to the table cell
+}
+
+$("BUTTON").click(function() {
+    alert(this.id);
+    var data = this.id;
+    var split_data = data.split(":");
+
+    if (this.textContent=="yes") {
+          this.textContent = "no";
+          changed_dict[split_data[0]][split_data[1]] = "no";
+
+          
+        }
+        else if(this.textContent=="no")
+        {
+            this.textContent = "yes";
+            changed_dict[split_data[0]][split_data[1]] = "yes";
+           
+        }
+      console.log("changed",changed_dict);
+});
+
+function postdata(){
+  $.post("http://127.0.0.1:5000/yamlchange",
+  changed_dict);
+}
+    
+</script>
+
+</body>
+</html>

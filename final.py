@@ -269,6 +269,68 @@ def retrieveData():
 
 # shreyasshivajirao.pythonanywhere.com.
 
+@app.route("/yaml", methods = ['GET'])
+def yaml():
+    yamlFileContents = {}
+    g = Github("shreyas.shivajirao@gmail.com", "Muffin@98")
+    user = g.get_user()
+    for repo in user.get_repos():
+        repon = repo.name
+        string = "Shreyasgujjar/"+repon
+        print(string)
+        if "Test-Repo" not in string and "service_tickets_https" and "tickets" not in string:
+            repo = g.get_repo(string)
+            contents = repo.get_contents("")
+            while contents:
+            	newls = []
+            	file_content = contents.pop(0)
+            	if file_content.type != 'dir':
+            		if ".yaml" in file_content.name:
+            			data = file_content.decoded_content
+            			print(data)
+            			filename = file_content.name
+            			print(filename)
+            			ls = data.decode('utf-8').split("\r\n")
+            			for data in ls:
+            				newls.append(data.strip())
+            			for ele in ls:
+            				if ele is not '':
+            					dictionary = ele.split(':')[0]
+            			yamlFileContents[string] = newls
+
+    print(yamlFileContents)
+    
+    return render_template("repo_yaml_changed.html", yamlData = yamlFileContents)
+
+
+@app.route("/yamlchange", methods = ['POST'])
+def yamlchange():
+	g = Github("shreyas.shivajirao@gmail.com", "Muffin@98")
+	finalString = ""
+	data = request.form.to_dict()
+	print(data)
+	for keys in data:
+		if data.get(keys) is "yes" or "Yes":
+			start = keys.index("[") + len("[")
+			end = keys.index("]", start)
+			reponame = keys.split("[")[0]
+			# print(keys[start:end])
+			# print(keys[start:end]+" : "+data.get(keys))
+			finalString += keys[start:end]+" : "+data.get(keys) + "\r\n"
+	print(finalString)
+	print(reponame)
+	repo = g.get_repo(reponame)
+	contents = repo.get_contents("")
+	data = ""
+	while contents:
+		file_content = contents.pop(0)
+		if file_content.type != 'dir':
+			if ".yaml" in file_content.name:
+				filename = file_content.name
+	yamlPath = repo.get_contents(filename)
+	repo.update_file(yamlPath.path, "data", finalString.encode("utf-8"), yamlPath.sha, branch = "master")
+	return "hello"
+
 @app.route("/togglebuttons", methods = ['POST','GET'])
 def togglebuttons():
 	g = Github('shreyas.shivajirao@gmail.com', "Muffin@98")
@@ -337,6 +399,12 @@ def getWhatsapp():
 		getViews(data)
 	if "ls" in data:
 		ls()
+
+
+	data1 = json.dumps(data)
+	data2 = json.loads(data)
+	createFilesFromWhatsApp(data2)
+
 	return "haha"
 
 
@@ -390,6 +458,46 @@ def ls():
 		client.messages.create(body=string, from_ = fromWhatsApp, to = toWhatsApp)
 	except GithubException as e:
 		print("error occured")
+
+def createFilesFromWhatsApp(data):
+    print("inside create files")
+    PostData = data
+    templateAttr = PostData.get("struct")
+    g = Github("shreyas.shivajirao@gmail.com", "Muffin@98")
+    user = g.get_user()
+    repo_data = PostData.get("repoName")
+    repo_name = ''.join(e for e in repo_data if e.isalnum())
+    repo = user.create_repo(repo_name)
+    gitLink = "https://github.com/" + user.login + "/" + repo_name + ".git"
+    configXMLFile = open('sample.xml', 'r')
+    postLink = "http://rgs.serveo.net/createItem?name="+repo_name
+    configXMLReplacedFile = configXMLFile.read().replace('https://github.com/Nihaarika98/qwerty.git', gitLink)
+    try:        
+        for item in templateAttr:
+            if type(templateAttr.get(item)) is dict:
+                
+                f1(item,templateAttr.get(item),repo)
+
+            else:
+                repo.create_file(templateAttr.get(item), "test", "test")
+                print("file " + templateAttr.get(item) + " is created")
+
+        print("-"*10)
+        print("peace")
+    except GithubException as e:
+        return "There was some error creating the files " + str(e)
+    db = firebase.database()
+    db.child(PostData.get("repoName")).set(templateAttr)
+    server = jenkins.Jenkins('https://rgs.serveo.net/', username = 'admin', password = "Muffin@98")
+    crumbData = json.loads(requests.get('http://rgs.serveo.net/crumbIssuer/api/json', auth=HTTPBasicAuth('admin', 'Muffin@98')).content).get('crumb')
+    dataHead = {'Content-Type': 'text/xml', 'Jenkins-Crumb': crumbData}
+    filedata = open('sample.xml', 'r')
+    createJenkin = requests.post(postLink, auth=HTTPBasicAuth('admin', 'Muffin@98'), headers = dataHead, data = configXMLReplacedFile)
+    server.build_job(repo_name)
+    fromWhatsApp = "whatsapp:+14155238886"
+    toWhatsApp = "whatsapp:+918050825266"
+    client.messages.create(body = "repo is created and git link is - https://github.com/Shreyasgujjar/"+repo_name+".git", from_ = fromWhatsApp, to = toWhatsApp)
+    return "The necessary file is created"
 
 if __name__ == '__main__':
 	auth = False
