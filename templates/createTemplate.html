@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>Create Page</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>    
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.css" />
+
+  <style>
+		*{box-sizing: border-box;}
+		body{
+			background-image: url("{{url_for('static', filename = 'img4.jfif')}}");
+			background-size: cover;
+			font-family: sans-serif;
+		}
+		.loginbox{
+			width: 320px;
+			height: 420px;
+			background:rgba(0,0,0,0.5);
+			color:#fff;
+			top:50%;
+			left:50%;
+			position:absolute;
+			transform:translate(-50%,-50%);
+			box-sizing:border-box;
+		}
+		.logo{
+			width:100px;
+			height:100px;
+			border-radius:50%;
+			position:absolute;
+			top:-50px;
+			left:110px;
+			
+		}
+		h1{
+    		margin-top:40px;
+    		padding:20px;
+    		text-align: center;
+    		font-size: 22px;
+		}
+
+		.loginbox p{
+    		margin-left: 15px;
+    		padding: 0;
+    		font-weight: bold;
+		}
+
+		.loginbox input{
+    		width: 100%;
+    		margin-bottom: 20px;
+    		padding:20px;
+		}
+
+		.loginbox input[type="text"], input[type="password"]
+		{
+    		border: none;
+    		border-bottom: 1px solid #fff;
+    		background: transparent;
+    		outline: none;
+    		height: 40px;
+    		color: #fff;
+    		font-size: 16px;
+		}
+		.loginbox input[type="submit"]
+		{
+    		border: none;
+    		padding:10px;
+    		outline: none;
+    		height: 40px;
+    		background: #fb2525;
+    		color: #fff;
+    		font-size: 18px;
+    		border-radius: 20px;
+    		
+		}
+		.loginbox input[type="submit"]:hover
+		{
+    		cursor: pointer;
+    		background: #ffc107;
+	    	color: #000;
+		}	
+		.loginbox a {
+    		text-decoration: none;
+    		font-size: 12px;
+    		line-height: 20px;
+    		color: darkgrey;
+    		float:left;
+    		padding: 10px;
+		}
+
+		.loginbox a:hover
+		{
+    		color: #ffc107;
+		}
+		.AccessButton {
+				float: right;
+				border: none;
+	    		padding:10px;
+	    		outline: none;
+	    		height: 40px;
+	    		background-color: #fb2525;
+	    		color: #fff;
+	    		font-size: 15px;
+	    		border-radius: 20px;
+	    		cursor: pointer;
+		}
+		.AccessToken :hover{
+				color: black;
+				background-color: #ffc107;
+
+		}
+		.AccessToken{
+			margin-top: 30px;
+			margin-right: 20px;
+		}
+	</style>    
+
+
+ </head>
+
+
+
+ <body>
+
+
+   <div class="row">
+    <div class="col-md-6" style=>
+    
+     <br />
+     <form method="post" id="treeview_form">
+
+
+      <div class="form-group" style="background-color: rgba(0,0,0,0.5); margin-left:700px;; color:white; padding:40px; width:600px; margin-top: 300px;">
+       <label style="font-size:50px;">Enter Template Name</label>
+	   <input type="text" name="template_name" class="form-control" id = "template_name" style="margin:40px; margin-left: 0px; margin-top: 20px;"> 
+	   <input type="submit" name="action_create" id="action_create" value="Create" class="btn btn-info" style="margin-left: 200px;"  />      
+      </div>
+
+
+<!--      
+      <div class="form-group">
+       
+      </div> -->
+
+      
+     </form>
+    </div>
+    
+   </div>
+ </body>
+</html>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/themes/default/style.min.css" />
+<script>
+	
+	var template_name = document.getElementById('template_name').value;
+	var re = new RegExp("^([^a-zA-Z])$");
+	var template_name_without_dot = template_name.replace(".", "_");
+	// document.getElementById('template_name').value = template_name_without_dot;
+
+
+
+</script>
+

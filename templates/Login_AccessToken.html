@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		Login
+	</title>
+	<style>
+		*{box-sizing: border-box;}
+		body{
+			background-color: black;
+			background-size: cover;
+			font-family: sans-serif;
+		}
+		.loginbox{
+			width: 320px;
+			height: 420px;
+			background:rgba(0,0,0,0.5);
+			color:#fff;
+			top:50%;
+			left:50%;
+			position:absolute;
+			transform:translate(-50%,-50%);
+			box-sizing:border-box;
+		}
+		.logo{
+			width:100px;
+			height:100px;
+			border-radius:50%;
+			position:absolute;
+			top:-50px;
+			left:110px;
+			
+		}
+		h1{
+    		margin-top:40px;
+    		padding:20px;
+    		text-align: center;
+    		font-size: 22px;
+		}
+
+		.loginbox p{
+    		margin-left: 15px;
+    		padding: 0;
+    		font-weight: bold;
+		}
+
+		.loginbox input{
+    		width: 100%;
+    		margin-bottom: 20px;
+    		padding:20px;
+		}
+
+		.loginbox input[type="text"]
+		{
+    		border: none;
+    		border-bottom: 1px solid #fff;
+    		background: transparent;
+    		outline: none;
+    		height: 40px;
+    		color: #fff;
+    		font-size: 16px;
+		}
+		.loginbox input[type="submit"]
+		{
+    		border: none;
+    		padding:10px;
+    		outline: none;
+    		height: 40px;
+    		background: #fb2525;
+    		color: #fff;
+    		font-size: 18px;
+    		border-radius: 20px;
+    		margin-top: 30px;
+		}
+		.loginbox input[type="submit"]:hover
+		{
+    		cursor: pointer;
+    		background: #ffc107;
+	    	color: #000;
+		}
+
+		
+	</style>
+</head>
+<body>
+	<div class="loginbox">
+		<img src="{{url_for('static', filename = 'logo.jpg')}}" class="logo">
+		<h1>Login Here</h1>
+		<form method="POST" action="">
+			<p>Access Token</p>
+			<input type="text" name="accessToken" placeholder="Access Token">
+			<input type="submit" name="" value="Login"><br>
+		</form>
+	</div> 
+</body>
+</html>

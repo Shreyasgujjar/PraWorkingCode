@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+ 
+<head>
+  <title>Existing Templates</title>
+  <style>
+    body {font-family: Arial, Helvetica, sans-serif;}
+    h1 {
+      font-family: sans-serif;
+      font-size: 64px;
+      color:black;
+      padding: 5px;
+      margin-left: 630px;
+      align-self: center;
+    }
+    ul {
+      padding: 0;
+      margin: 10px;
+    }
+    li {
+      font-family: sans-serif;
+      background-color:gold;
+      float: left;
+      clear: both;
+      padding: 5px;
+      list-style-type: none;
+      margin: 10px;
+      border-radius: 5px;
+    }
+
+    button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column; 
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  width: 200px;
+}
+  </style>
+</head>
+ 
+<body style = "background: #d9d1ce; color: black">
+  <h1>Existing Templates</h1>
+  <div style="display: inline-block; float: left;">
+    
+  <ul>
+ 
+  </ul>
+
+</div>
+
+  <div class="container" style="width:900px; display: inline-block; float: right;">
+       
+   
+      <div class="row">
+       <!-- <div class="col-md-6">
+        
+       </div> -->
+       <div class="col-md-6">
+        <h3 align="center"><u>Template Structure</u></h3>
+        <br />
+        <div id="treeview" style="margin-left: 80px;"></div>
+        <div style="position: absolute;right:300px;bottom:300px;display: none;" id="use_temp">
+          <a href="{{url_for('useTemplate')}}" >Use Template</a>
+        </div>
+        
+       </div>
+      </div>
+     </div>
+  <script src="https://www.gstatic.com/firebasejs/6.3.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.3.0/firebase-database.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/themes/default/style.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/jstree.min.js"></script>
+  <script>
+
+
+  
+var firebaseConfig = {
+    apiKey: "AIzaSyAvbcA36dCFDGs8r8OpvdfLVl-Unh9CCT4",
+    authDomain: "commuteapp-90b42.firebaseapp.com",
+    databaseURL: "https://commuteapp-90b42.firebaseio.com",
+    projectId: "commuteapp-90b42",
+    storageBucket: "commuteapp-90b42.appspot.com",
+    messagingSenderId: "159775746050",
+    appId: "1:159775746050:web:6eccfebe6a3d0be5"
+  };
+  firebase.initializeApp(firebaseConfig);
+  var toppings = [];
+
+
+  firebase.database().ref().once('value').then(function(snapshot) {
+  var string = JSON.stringify(snapshot.val());
+   //toppings = snapshot.val().keys();
+  var data = JSON.parse(string);
+  console.log(data);
+  var keys = Object.keys(data);
+
+  for ( var i =0;i<keys.length;i++){
+    toppings.push((keys[i]));
+    console.log(keys[i]);
+  }
+
+ var ul = document.querySelector("ul");
+
+for (var i = 0; i < toppings.length; i++) {
+  var topping = toppings[i];
+
+  var listItem = document.createElement("BUTTON");
+  listItem.textContent = topping;
+
+  ul.appendChild(listItem);
+}
+
+$("BUTTON").click(function() {
+    localStorage.setItem("temp_name", this.textContent );
+    use_temp.style.display = "block";
+    var template_name = this.textContent;
+    console.log(template_name);
+    firebase.database().ref('/' + template_name ).once('value').then(function(snapshot) {
+    var string = JSON.stringify(snapshot.val());
+    var data = JSON.parse(string);
+    //console.log(string);
+    author = snapshot.val();
+    var lst = [];
+    var node_det = {};
+    node_det["id"] =  template_name;
+    node_det["parent"] = "#";
+    node_det["text"] = template_name;
+    
+    lst.push(node_det);
+for(var k in author) {
+    if(author[k] instanceof Object) {
+        node_det = {};
+        node_det["id"] = template_name + "/" + k;
+        node_det["parent"] = template_name;
+        node_det["text"] = k;
+        node_det["type"] = "root";
+        lst.push(node_det);
+        console.log("function called");
+        myfunction(template_name + "/" + k,author[k]);
+    }
+    else {            
+        node_det = {};                                                    
+        node_det["id"] = template_name + "/" + author[k];
+        node_det["parent"] = template_name;
+        node_det["text"] = author[k];
+        node_det["type"] = "child";
+        lst.push(node_det);
+    }
+
+}
+function myfunction(k,author)
+{
+    for(var test in author){
+        if(author[test] instanceof Object) {
+            node_det = {};
+            node_det["id"] = k + "/" + test;
+            node_det["parent"] = k;
+            node_det["text"] = test;
+            node_det["type"] = "root";
+            lst.push(node_det);
+            myfunction(k + "/" +test,author[test]);
+        }
+        else{
+            node_det = {};
+            node_det["id"] = k + "/" + author[test];
+            node_det["parent"] = k;
+            node_det["text"] = author[test];
+            node_det["type"] = "child";
+            lst.push(node_det);
+        }
+    }
+   
+}
+console.log(lst);
+javatree(lst);
+  
+});
+     
+   
+  
+  function javatree(lst){
+    console.log("Inside",lst);
+    $('#treeview').jstree('destroy');
+    
+
+    $('#treeview').jstree("refresh");
+    $('#treeview')
+  .jstree({
+  core: {
+    data: lst
+  },
+  types: {
+    "root": {
+      // "icon" : "glyphicon glyphicon-folder-open"
+    },
+    "child": {
+      "icon" : "glyphicon glyphicon-leaf"
+    },
+    "default" : {
+    }
+  },
+  plugins: ["search", "themes", "types"]
+}).on('open_node.jstree', function (e, data) { data.instance.set_icon(data.node, "glyphicon glyphicon-folder-open"); 
+}).on('close_node.jstree', function (e, data) { data.instance.set_icon(data.node, "glyphicon glyphicon-folder-close"); 
+}).on('loaded.jstree', function(){
+  $("#treeview").jstree("open_all");
+});
+// window.setInterval(javatree(lst), 1000);
+  }
+
+});
+});
+
+
+  </script>
+</body>
+ 
+</html>

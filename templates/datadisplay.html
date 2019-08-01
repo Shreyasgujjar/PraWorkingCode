@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+   <body>
+       {%for item in data:%}
+       {% if data.get(item) is mapping %}
+       <h1>{{ f2(items = data.get(item)) }}</h1>
+       {% else %}
+       <h1>data.get(item)</h1>
+       {% endif %}
+       {% endfor %}
+   </body>
+</html>

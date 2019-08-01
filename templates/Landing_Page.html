@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Auto Data</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+		<!-- <link href="{{url_for('static', filename = 'styles/Proj1.css')}}" rel="stylesheet" type="text/css"> -->
+		<!-- <link rel="stylesheet" href="Proj1.css"> -->
+		<style>
+			body{
+				background-image: url("{{url_for('static', filename = 'img4.jfif')}}");
+				/* background-image: url("C:/Users/smishra/Desktop/RepoGeneration-development/templates/img4.jfif"); */
+				background-size: cover;
+				color: white;
+			}
+			.One{ 
+					font-family:"Raleway", sans-serif;
+					color:white;
+					margin-top:100px; 
+					margin-bottom:10px; 
+					margin-left:150px; 
+					margin-right:150px; 
+					padding-top:0px; 
+					padding-left: 70px;
+					font-size: 100px;
+					height: 250px; 
+					text-align: center;
+					padding-bottom: 50px;
+					height:200px;
+				}
+			.container {
+				 	position: relative;
+					width: 100;
+					margin-left: 100px;
+				}
+
+			.image1 {
+				  margin-top: 160px;
+				  opacity: 1;
+				  display: inline;
+				  width: 300px;
+				  height: 300px;
+				  transition: .5s ease;
+				  backface-visibility: hidden;
+				  margin-left: 400px;
+				}
+			.image2 {
+
+				  opacity: 1;
+				  margin-top: 230px;
+				  display: inline;
+				  width: 300px;
+				  height: 300px;
+				  transition: .5s ease;
+				  backface-visibility: hidden;
+				  margin-left: 500px;
+				}
+			.middle1 {
+				  transition: .5s ease;
+				  opacity: 0;
+				  position: absolute;
+				  margin-top:-150px;
+				  margin-left:550px;
+				  transform: translate(-50%, -50%);
+				  text-align: center;
+			}
+			.middle2 {
+				  transition: .5s ease;
+				  opacity: 0;
+				  position: absolute;
+				  margin-top:-150px;
+				  margin-left:550px;
+				  transform: translate(-50%, -50%);
+				  text-align: center;
+			}
+
+			.image1:hover  {
+			  	opacity: 0.3;
+			}
+
+			.image2:hover  {
+			  	opacity: 0.3;
+			}
+			.Four:hover .middle1 {
+					opacity: 1;
+			}
+			.Five:hover .middle2 {
+					opacity: 1;
+			}
+			.text {
+				  background-color: black;
+				  color: white;
+				  font-size: 16px;
+				  padding: 16px 32px;
+
+			}
+			input[type=text], select {
+				  width: 60%;
+				  padding: 12px 20px;
+				  margin: 8px 0;
+				  display: inline-block;
+				  border: 1px solid #ccc;
+				  border-radius: 4px;
+				  box-sizing: border-box;
+			}
+
+			input[type=submit] {
+				  width: 60%;
+				  background-color: lightgrey;
+				  color: black;
+				  padding: 14px 20px;
+				  margin: 8px 0;
+				  border: none;
+				  border-radius: 4px;
+				  cursor: pointer;
+			}
+
+			input[type=submit]:hover {
+			 	  background-color:black ;
+			 	  color:lightgrey;
+			}
+			input[type=button] {
+				border: none;
+	    		background-color: black;
+	    		padding:15px;
+				border-radius: 5px;
+	    		text-decoration: none;
+	    		text-align: center;
+	    		margin-left: 1585px;
+	    		outline: none;
+	    		height: 60px;
+	    		color: white;
+	    		font-size: 16px;
+			}
+			input[type=button]:hover {
+				background-color: white;
+				color:black;
+			}
+		</style>
+	</head>	
+<body>  
+	<!-- background="{{url_for('static', filename = 'LandingPage.jpg')}}" -->
+	<div class="One">
+		<h1 style="font-size: 60px; background-color: rgb(0,0,0,0.8); margin:30px; height:150px;  text-align: center; padding-top: 25px;">Welcome!</h1>
+	</div>
+	<!-- <div>
+		<input type="button" onclick="fun()" value="Commit History" style="padding-bottom: 10px;">
+		<script>
+			function fun(){
+				$.get("http://127.0.0.1:5000/sendViewTraffic");
+			}
+		</script>
+	</div> -->
+  	<div class="container">
+  		<div class ="Two"style="width:500px; height:500px; padding: 30px; display: inline-block; float:left;">
+	  		<a href="{{url_for('createRepo')}}">
+	  			<div class="Four">
+		  			<img src="{{url_for('static', filename = 'CreateF.jpg')}}" alt="Create" class="image1">
+		  			<!-- <img src= "C:/Users/smishra/Desktop/RepoGeneration-development/templates/CreateF.jpg" class="image1" alt="Create")>  -->
+		  			<div class="middle1">
+		  				<div class="text">Create</div>
+		  			</div>
+		  		</div>
+			</a>
+		</div>
+		<div class="Three" style="width:500px; height:500px; padding: 30px; display: inline-block; float:left;">
+			<a href="{{url_for('shreyas')}}">
+				<div class="Five" style="width:150px;">
+		  			<img src="{{url_for('static', filename = 'ModifyF.jpg')}}" alt="Customize" class="image2">
+		  			<!-- <img src= "C:/Users/smishra/Desktop/RepoGeneration-development/templates/ModifyF.jpg" class="image1" alt="Create")> -->
+		  			<div class="middle2">
+		  				<div class="text">Customize</div>
+		  			</div>
+		  		</div>
+			</a>
+		</div>
+	</div>
+</body>
+</html
